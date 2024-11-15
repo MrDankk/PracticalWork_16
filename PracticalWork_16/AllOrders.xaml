@@ -11,44 +11,23 @@
             <ColumnDefinition Width="80*"/>
             <ColumnDefinition Width="20*"/>
         </Grid.ColumnDefinitions>
-        
-        <DataGrid x:Name="GridView"
-          IsSynchronizedWithCurrentItem="True"
-          SelectionMode="Single"
-          AutoGenerateColumns="False"
-          ItemsSource="{Binding}"
-          IsReadOnly="False">
 
+        <ListView x:Name="OrdersView" SelectionChanged="SelectedItem">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Id" DisplayMemberBinding="{Binding Id}" Width="50"/>
+                    <GridViewColumn Header="Название товара" DisplayMemberBinding="{Binding ProductName}" Width="300"/>
+                    <GridViewColumn Header="Номер товара" DisplayMemberBinding="{Binding ProductCode}" Width="200"/>
+                </GridView>
+            </ListView.View>
 
-            <DataGrid.Columns>
-
-                <DataGridTextColumn x:Name="Id"
-                            Binding="{Binding Id}"
-                            Header="ID"
-                            Width="25"/>
-
-                <DataGridTextColumn x:Name="ProductName"
-                            Binding="{Binding ProductName}"
-                            Header="Фамилия"
-                            Width="3*"/>
-
-                <DataGridTextColumn x:Name="ProductCode"
-                            Binding="{Binding ProductCode}"
-                            Header="Имя"
-                            Width="2*"/>
-
-
-            </DataGrid.Columns>
-
-            <DataGrid.ContextMenu>
+            <ListView.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Посмотреть заказы"/>
-                    <MenuItem Header="Добавить"/>
-                    <MenuItem Header="Удалить"/>
+                    <MenuItem Header="Удалить заказ" Click="DeleteOrder" />
                 </ContextMenu>
-            </DataGrid.ContextMenu>
-
-        </DataGrid>
+            </ListView.ContextMenu>
+            
+        </ListView>
 
         <Button Grid.Column="1"
                 Height="30"

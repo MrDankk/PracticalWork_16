@@ -25,14 +25,10 @@ namespace PracticalWork_16
     /// </summary>
     public partial class MainWindow : Window
     {
-        //Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\Users\Valera\source\repos\PracticalWork_16\PracticalWork_16\db\MSAccessDB.accdb
-
         public SqlConnection sqlConnection;
         SqlDataAdapter sqlDataAdapter;
 
-        public OleDbConnection oleDbConnection;
         string oleDbStrCon;
-        OleDbDataAdapter oleDbDataAdapter;
 
         DataTable dataTable;
         DataRowView dataRowView;
@@ -44,6 +40,9 @@ namespace PracticalWork_16
             Preparing();
         }
 
+       /// <summary>
+       /// Подготовка программы
+       /// </summary>
        public void Preparing()
         {
             dataTable = new DataTable();
@@ -62,7 +61,6 @@ namespace PracticalWork_16
         /// <param name="e"></param>
         private void GVCellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
-
             dataRowView = (DataRowView)GridView.SelectedItem;
             dataRowView.BeginEdit();
         }
@@ -102,7 +100,7 @@ namespace PracticalWork_16
         private void MenuItemAddClick(object sender, RoutedEventArgs e)
         {
             DataRow r = dataTable.NewRow();
-            AddWindow add = new AddWindow(r);
+            NewCustomerWindow add = new NewCustomerWindow(r);
             add.ShowDialog();
 
 
@@ -113,6 +111,11 @@ namespace PracticalWork_16
             }
         }
 
+        /// <summary>
+        /// Показать заказы клиента
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MenuItemShowClick(object sender, RoutedEventArgs e)
         {
             if (GridView.SelectedItem != null) 
@@ -120,7 +123,7 @@ namespace PracticalWork_16
                 dataRowView = (DataRowView)GridView.SelectedItem;
             }
             
-            new AllOrders(dataRowView[5].ToString() , oleDbDataAdapter, oleDbConnection).ShowDialog();
+            new AllOrders(dataRowView[5].ToString(), oleDbStrCon).ShowDialog();
         }
 
         #region Подключение баз данных
@@ -204,47 +207,6 @@ namespace PracticalWork_16
         {
             oleDbStrCon = @"Provider=Microsoft.ACE.OLEDB.12.0; Data Source=C:\Users\Valera\source\repos\PracticalWork_16\PracticalWork_16\db\MSAccessDB.accdb; User ID=admin;"
             + "Jet OLEDB:Encrypt Database=True;Jet OLEDB:Database Password=test123;Persist Security Info=True;";
-
-            oleDbConnection = new OleDbConnection(oleDbStrCon);
-            oleDbDataAdapter = new OleDbDataAdapter();
-
-            #region Insert
-
-            var query = @"INSERT INTO Table_1 (ProductName,  ProductCode, Mail) 
-                                 VALUES (@ProductName, @ProductCode, @Mail); 
-                     SET @Id = @@IDENTITY;";
-
-            oleDbDataAdapter.InsertCommand = new OleDbCommand(query, oleDbConnection);
-            oleDbDataAdapter.InsertCommand.Parameters.Add("@Id", OleDbType.Integer, 4, "Id").Direction = ParameterDirection.Output;
-            oleDbDataAdapter.InsertCommand.Parameters.Add("@ProductName", OleDbType.VarWChar, 50, "ProductName");
-            oleDbDataAdapter.InsertCommand.Parameters.Add("@ProductCode", OleDbType.VarWChar, 50, "ProductCode");
-            oleDbDataAdapter.InsertCommand.Parameters.Add("@Mail", OleDbType.VarWChar, 50, "Mail");
-
-            #endregion
-
-            #region Update
-
-            query = @"UPDATE Table_1 SET 
-                           ProductName = @ProductName,
-                           ProductCode = @ProductCode,
-                           Mail = @Mail
-                    WHERE Id = @Id";
-
-            oleDbDataAdapter.UpdateCommand = new OleDbCommand(query, oleDbConnection);
-            oleDbDataAdapter.UpdateCommand.Parameters.Add("@Id", OleDbType.Integer, 0, "Id").SourceVersion = DataRowVersion.Original;
-            oleDbDataAdapter.UpdateCommand.Parameters.Add("@ProductName", OleDbType.VarWChar, 50, "ProductName");
-            oleDbDataAdapter.UpdateCommand.Parameters.Add("@ProductCode", OleDbType.VarWChar, 50, "ProductCode");
-            oleDbDataAdapter.UpdateCommand.Parameters.Add("@Mail", OleDbType.VarWChar, 50, "Mail");
-            #endregion
-
-            #region Delete
-
-            query = "DELETE FROM Table_1 WHERE Id = @Id";
-
-            oleDbDataAdapter.DeleteCommand = new OleDbCommand(query, oleDbConnection);
-            oleDbDataAdapter.DeleteCommand.Parameters.Add("@Id", OleDbType.Integer, 4, "Id");
-
-            #endregion
         }
 
         #endregion

@@ -18,11 +18,11 @@ namespace PracticalWork_16
     /// <summary>
     /// Логика взаимодействия для AddWindow.xaml
     /// </summary>
-    public partial class AddWindow : Window
+    public partial class NewCustomerWindow : Window
     {
-        private AddWindow() { InitializeComponent(); }
+        private NewCustomerWindow() { InitializeComponent(); }
 
-        public AddWindow(DataRow row):this()
+        public NewCustomerWindow(DataRow row):this()
         {
             cancelBtn.Click += delegate { this.DialogResult = false; };
             okBtn.Click += delegate

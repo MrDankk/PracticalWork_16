@@ -20,5 +20,13 @@ namespace PracticalWork_16
             ProductCode = productCode;
             ProductName = productName;
         }
+
+        public Order(Order order) 
+        { 
+            Id = order.Id;
+            Mail = order.Mail;
+            ProductCode = order.ProductCode;
+            ProductName = order.ProductName;
+        }
     }
 }
